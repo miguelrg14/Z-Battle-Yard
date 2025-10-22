@@ -59,5 +59,8 @@
 #2D
 *.psd filter=lfs diff=lfs merge=lfs -text
 
-#TEXT
+#Text
 *.txt filter=lfs diff=lfs merge=lfs -text
+
+#Shaders
+*.hdr filter=lfs diff=lfs merge=lfs -text
