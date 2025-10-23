@@ -70,3 +70,6 @@
 
 #Shaders
 *.hdr filter=lfs diff=lfs merge=lfs -text
+
+#Texturas
+*.spp filter=lfs diff=lfs merge=lfs -text
