@@ -28,8 +28,15 @@ public class HeadRotation : MonoBehaviour
 
     Quaternion originRotation;
 
-    void Awake() => GetReferences();
-    void Start() => InitVariables();
+    void Awake()
+    {
+        movementController = GetComponentInParent<MovementController>();
+    }
+    void Start()
+    {
+        originRotation = transform.localRotation; // Get the rotation of the object before the game starts to make it appear rotated
+        //originRotation = new Quaternion(0f, 0f, 0f, 1f); // Get the rotation of the object before the game starts to make it appear rotated
+    }
 
     void Update() => InputCalculations();
 
@@ -58,14 +65,5 @@ public class HeadRotation : MonoBehaviour
         // Apply the final rotation adding up every rotation calculated in the previous code lines
         //transform.localRotation = Quaternion.Euler(newCamRotation + newCamMovementRotation);
         this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, Quaternion.Euler(newCamRotation + newCamMovementRotation) * originRotation, Time.smoothDeltaTime * WASDSmoothingRotation);
-    }
-
-    void GetReferences()
-    {
-        movementController = GetComponentInParent<MovementController>();
-    }
-    void InitVariables()
-    {
-        originRotation = transform.localRotation; // Get the rotation of the object before the game starts to make it appear rotated
     }
 }

@@ -83,9 +83,27 @@ public class HeadMovement : MonoBehaviour
     Vector2 padInput;   // Gamepad mouse movement calculator
     Vector2 WASDInput; // WASD Input
 
-    void Awake() => GetReferences();
-    void Start() => InitVariables();
-    void Update() => InputCalculations();
+    void Awake()
+    {
+        camera = Camera.main.transform;
+        shakeHolderTransform = GetComponentInParent<ShakeTransform>();
+        movementController = GetComponentInParent<MovementController>();
+    }
+    void Start()
+    {
+        playerInput = new PlayerInput();
+        playerInput.Enable();
+
+        startPos = camera.localPosition;
+        camFOV.fieldOfView = PlayerPrefs.GetInt("fov");
+
+        initialPosition = transform.localPosition;
+        originRotation = transform.localRotation; // Get the rotation of the object before the game starts to make it appear rotated
+    }
+    void Update()
+    {
+        InputCalculations();
+    }
     void LateUpdate()
     {
         /// WASD
@@ -326,23 +344,6 @@ public class HeadMovement : MonoBehaviour
 
     #endregion
 
-    void GetReferences()
-    {
-        camera = Camera.main.transform;
-        shakeHolderTransform = GetComponentInParent<ShakeTransform>();
-        movementController = GetComponentInParent<MovementController>();
-    }
-    void InitVariables()
-    {
-        playerInput = new PlayerInput();
-        playerInput.Enable();
-
-        startPos = camera.localPosition;
-        camFOV.fieldOfView = PlayerPrefs.GetInt("fov");
-
-        initialPosition = transform.localPosition;
-        originRotation = transform.localRotation; // Get the rotation of the object before the game starts to make it appear rotated
-    }
     void OnDisable()
     {
         playerInput.Disable();

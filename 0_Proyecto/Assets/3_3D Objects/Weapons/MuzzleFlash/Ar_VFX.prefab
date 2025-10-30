@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8686864555826501033}
   - component: {fileID: 1428110327548241901}
   m_Layer: 0
-  m_Name: MuzzleFlashAr
+  m_Name: Ar_VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
