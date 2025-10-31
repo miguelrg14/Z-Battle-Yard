@@ -4208,7 +4208,7 @@ PrefabInstance:
     - target: {fileID: 7080292813276961764, guid: feee302bca6f8bc4eb203c881ba9b010,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -390.00003
+      value: -390
       objectReference: {fileID: 0}
     - target: {fileID: 7142754985101394907, guid: feee302bca6f8bc4eb203c881ba9b010,
         type: 3}
@@ -4643,7 +4643,7 @@ PrefabInstance:
     - target: {fileID: 7879312438173920433, guid: feee302bca6f8bc4eb203c881ba9b010,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -390.00003
+      value: -390
       objectReference: {fileID: 0}
     - target: {fileID: 7973771288452014361, guid: feee302bca6f8bc4eb203c881ba9b010,
         type: 3}
@@ -11149,7 +11149,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9725491, g: 0.25490198, b: 0.35686275, a: 1}
+    m_NormalColor: {r: 0.25490198, g: 0.84313726, b: 0.972549, a: 1}
     m_HighlightedColor: {r: 0.007843138, g: 0.9215687, b: 0.9333334, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -15395,7 +15395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14117648, g: 0.09019608, b: 0.20392157, a: 0.3254902}
+  m_Color: {r: 0.09019608, g: 0.09695741, b: 0.20392157, a: 0.3254902}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -17739,7 +17739,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 449.995, y: -510.00003}
+  m_AnchoredPosition: {x: 449.995, y: -510}
   m_SizeDelta: {x: 899.99, y: 780}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &784429611
@@ -20921,8 +20921,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190335
-  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
+    rgba: 4294498113
+  m_fontColor: {r: 0.25490198, g: 0.84313726, b: 0.972549, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -28319,7 +28319,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.972549, g: 0.25490198, b: 0.35686275, a: 1}
+    m_NormalColor: {r: 0.25490198, g: 0.84313726, b: 0.972549, a: 1}
     m_HighlightedColor: {r: 0.007843138, g: 0.92156863, b: 0.93333334, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -28341,7 +28341,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 701782652}
   m_HandleRect: {fileID: 2042982705}
   m_Direction: 2
-  m_Value: 0.9999999
+  m_Value: 1
   m_Size: 0.65
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -33150,7 +33150,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9725491, g: 0.25490198, b: 0.35686275, a: 1}
+    m_NormalColor: {r: 0.25490198, g: 0.84313726, b: 0.972549, a: 1}
     m_HighlightedColor: {r: 0.007843138, g: 0.9215687, b: 0.9333334, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -34119,7 +34119,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.972549, g: 0.25490198, b: 0.35686275, a: 1}
+    m_NormalColor: {r: 0.25490198, g: 0.84313726, b: 0.972549, a: 1}
     m_HighlightedColor: {r: 0.007843138, g: 0.92156863, b: 0.93333334, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -50372,8 +50372,8 @@ MonoBehaviour:
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 0.96862745, g: 0.39607844, b: 0.72156864, a: 1}
-    topRight: {r: 0.96862745, g: 0.39607844, b: 0.72156864, a: 1}
+    topLeft: {r: 0, g: 0, b: 1, a: 1}
+    topRight: {r: 0, g: 0, b: 1, a: 1}
     bottomLeft: {r: 0.15294118, g: 0.99215686, b: 0.9607843, a: 1}
     bottomRight: {r: 0.15294118, g: 0.99215686, b: 0.9607843, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
@@ -51145,7 +51145,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9725491, g: 0.25490198, b: 0.35686275, a: 1}
+    m_NormalColor: {r: 0.25490198, g: 0.84313726, b: 0.972549, a: 1}
     m_HighlightedColor: {r: 0.007843138, g: 0.9215687, b: 0.9333334, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -52437,8 +52437,8 @@ MonoBehaviour:
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 0.9686275, g: 0.39607847, b: 0.72156864, a: 1}
-    topRight: {r: 0.9686275, g: 0.39607847, b: 0.72156864, a: 1}
+    topLeft: {r: 0, g: 0, b: 1, a: 1}
+    topRight: {r: 0, g: 0, b: 1, a: 1}
     bottomLeft: {r: 0.15294118, g: 0.9921569, b: 0.9607844, a: 1}
     bottomRight: {r: 0.15294118, g: 0.9921569, b: 0.9607844, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
@@ -53589,7 +53589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.32941177, g: 0.07450981, b: 0.53333336, a: 0.39215687}
+  m_Color: {r: 0.074509814, g: 0.08857785, b: 0.53333336, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -55168,7 +55168,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9725491, g: 0.25490198, b: 0.35686275, a: 1}
+    m_NormalColor: {r: 0.25490198, g: 0.84313726, b: 0.972549, a: 1}
     m_HighlightedColor: {r: 0.007843138, g: 0.9215687, b: 0.9333334, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -56383,11 +56383,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5847909451702672377, guid: efe0941a114bee848b3d3625edf3dd02,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5847909451702672377, guid: efe0941a114bee848b3d3625edf3dd02,
         type: 3}
