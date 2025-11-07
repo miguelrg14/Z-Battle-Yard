@@ -9,8 +9,6 @@
 
 public class WeaponSway : MonoBehaviour 
 {
-    #region - Variables -
-
     PlayerInput playerInput;
     PlayerStats stats;
     MovementController movementController;
@@ -160,12 +158,24 @@ public class WeaponSway : MonoBehaviour
     Vector2 WASDInput; // WASD Input
     Vector2 padInput;   // Gamepad mouse movement calculator
 
-    #endregion
+    void Awake()
+    {
+        stats = GetComponentInParent<PlayerStats>();
+        movementController = GetComponentInParent<MovementController>();
+    }
+    void Start()
+    {
+        playerInput = new PlayerInput();
+        if (!playerInput.asset.enabled) playerInput.Enable(); // Enable input system!
 
-    #region - Awake | Start | Update | FixedUpdate | LateUpdate -
+        initialGunPositionRecoil = transform.localPosition;
 
-    void Awake() => GetReferences();
-    void Start() => InitVariables();
+        initialPosition = transform.localPosition;
+        originRotation = transform.localRotation; // Get the rotation of the object before the game starts to make it appear rotated
+        weaponParentOrigin = weaponParent.transform.localPosition;
+        newWeaponRotation = transform.localRotation.eulerAngles;
+        currentEulerAngles = transform.localRotation.eulerAngles;
+    }
 
     void Update()
     {
@@ -207,8 +217,6 @@ public class WeaponSway : MonoBehaviour
             //}
         }
     }
-
-    #endregion
 
     #region - Logic -
 
@@ -450,30 +458,6 @@ public class WeaponSway : MonoBehaviour
     }
 
     #endregion
-
-    #endregion
-
-    #region - Reference && Initialize -
-
-    void GetReferences()
-    {
-        stats = GetComponentInParent<PlayerStats>();
-        movementController = GetComponentInParent<MovementController>();
-    }
-
-    void InitVariables()
-    {
-        playerInput = new PlayerInput();
-        if (!playerInput.asset.enabled) playerInput.Enable(); // Enable input system!
-
-        initialGunPositionRecoil = transform.localPosition;
-
-        initialPosition = transform.localPosition;
-        originRotation = transform.localRotation; // Get the rotation of the object before the game starts to make it appear rotated
-        weaponParentOrigin = weaponParent.transform.localPosition;
-        newWeaponRotation = transform.localRotation.eulerAngles;
-        currentEulerAngles = transform.localRotation.eulerAngles;
-    }
 
     #endregion
 }

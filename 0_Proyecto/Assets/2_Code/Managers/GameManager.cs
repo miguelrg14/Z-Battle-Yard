@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    #region - Variables -
-
     public int round = 1;
     int zombiesInRound = 10;
     public static int zombiesLeftInRound = 10;
@@ -37,18 +35,10 @@ public class GameManager : MonoBehaviour
     public static int playerScore = 0;
     public static int playerCash = 0;
 
-    #endregion
-
-    #region - Update -
-
     void Update()
     {
         UpdateGameLogic();
     }
-
-    #endregion
-
-    #region - Game Logic -
 
     void UpdateGameLogic()
     {
@@ -127,10 +117,6 @@ public class GameManager : MonoBehaviour
         roundText.text = round.ToString();
     }
 
-    #endregion
-
-    #region
-
     public static void CashPerHit()
     {
         playerCash += 10;
@@ -140,6 +126,4 @@ public class GameManager : MonoBehaviour
     {
         playerCash += 100;
     }
-
-    #endregion
 }
