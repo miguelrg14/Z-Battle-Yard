@@ -391,7 +391,7 @@ public class WeaponSway : MonoBehaviour
 
     private void ShootingKnockback()
     {
-        if(enableWeaponKnockback)
+        if (enableWeaponKnockback)
         {
             /// Position [0, y, z]
             float moveZ = Mathf.Clamp(knockbackIntensityZ, -maxKnockbackZ, maxKnockbackZ); // Z (Back)
