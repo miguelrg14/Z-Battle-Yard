@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <QuickNote>
 ///  
@@ -109,7 +110,7 @@ public class WeaponSway : MonoBehaviour
 
     [Header("Shooting Knockback    ▄︻═デ┻┳── - - - - -")]
 
-
+    private Coroutine knockbackRoutine = null;
 
     [Header("Position")]
 
@@ -206,15 +207,22 @@ public class WeaponSway : MonoBehaviour
 
         if (isMine && !stats.IsDead())
         {
-            if (enableMousePosition)  UpdateMousePosition();
-            if (enableWASDPosition)   UpdateWASDPosition();
-            if (enableWASDWalk)       UpdatePlayerWalk();
-            if (activateWeaponKnockback) ShootingKnockback(); // Weapon
-            //if (activateWeaponKnockback)
-            //{
-            //    Recoil();
-            //    Back(); // Weapon
-            //}
+            if (enableMousePosition) UpdateMousePosition();
+            if (enableWASDPosition) UpdateWASDPosition();
+            if (enableWASDWalk) UpdatePlayerWalk();
+
+            if (activateWeaponKnockback)
+            {
+                // arranca la coroutine si no está ya en ejecución; si quieres reiniciarla siempre, para la existente primero
+                if (knockbackRoutine != null)
+                {
+                    StopCoroutine(knockbackRoutine);
+                    knockbackRoutine = null;
+                }
+
+                knockbackRoutine = StartCoroutine(WeaponKnockbackCoroutine());
+                activateWeaponKnockback = false; // ya la hemos consumido
+            }
         }
     }
 
@@ -389,53 +397,99 @@ public class WeaponSway : MonoBehaviour
     Vector3 currentEulerAngles;
     Quaternion currentRotation;
 
-    private void ShootingKnockback()
+    //private void ShootingKnockback()
+    //{
+    //    if (enableWeaponKnockback)
+    //    {
+    //        /// Position [0, y, z]
+    //        float moveZ = Mathf.Clamp(knockbackIntensityZ, -maxKnockbackZ, maxKnockbackZ); // Z (Back)
+    //        float moveY = Mathf.Clamp(knockbackIntensityY, -maxKnockbackY, maxKnockbackY); // Y (Up/Down)
+    //        Vector3 finalPosition = new Vector3(0, moveY, -moveZ);
+    //        transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition, Time.fixedDeltaTime * knockbackSmoothIntensityZ);
+
+    //        ///// Rotation [0, y, 0] NOT WORKING!!!!
+    //        //Quaternion rotateY = Quaternion.AngleAxis(knockbackRotationIntensityX, Vector3.up);
+    //        ////float rotateY = Mathf.Clamp(knockbackRotationIntensityY, -maxKnockbackRotationY, maxKnockbackRotationY); // Y (Up/Down)
+    //        //Quaternion targetRotation = originRotation * rotateY;
+    //        ////Quaternion finalRotation = new Quaternion(0, rotateY, 0);
+    //        //transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.smoothDeltaTime * knockbackRotationSmoothIntensityX);
+
+
+
+
+    //        //targetPositionRecoil -= new Vector3(0, 0, kickBackZ);
+    //        //targetPositionRecoil += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
+
+    //        //targetPositionRecoil = Vector3.Lerp(targetPositionRecoil, initialGunPositionRecoil, Time.deltaTime * returnAmount);
+    //        //currentPositionRecoil = Vector3.Lerp(currentPositionRecoil, targetPositionRecoil, Time.fixedDeltaTime * snappiness);
+    //        //transform.localPosition = currentPositionRecoil;
+
+
+
+    //        //finalPosition = Quaternion.Euler()
+    //        //transform.rotation = Quaternion.Slerp(transform.rotation, finalPosition, knockbackSmoothIntensityZ * Time.smoothDeltaTime)
+
+
+
+    //        ////modifying the Vector3, based on input multiplied by speed and time
+    //        //currentEulerAngles += new Vector3(-knockbackRotationIntensityX, 0, 0) * Time.smoothDeltaTime * knockbackRotationSmoothIntensityX;
+
+    //        ////moving the value of the Vector3 into Quanternion.eulerAngle format
+    //        //currentRotation.eulerAngles = currentEulerAngles;
+
+    //        ////apply the Quaternion.eulerAngles change to the gameObject
+    //        //transform.localRotation = currentRotation;
+
+
+    //        activateWeaponKnockback = false;
+    //    }
+    //}
+
+    private IEnumerator WeaponKnockbackCoroutine()
     {
-        if (enableWeaponKnockback)
+        // calcula posiciones
+        float moveZ = Mathf.Clamp(knockbackIntensityZ, -maxKnockbackZ, maxKnockbackZ); // Z (Back)
+        float moveY = Mathf.Clamp(knockbackIntensityY, -maxKnockbackY, maxKnockbackY); // Y (Up/Down)
+        Vector3 startPos = transform.localPosition;
+        Vector3 targetPos = new Vector3(0f, moveY, -moveZ);
+
+        // evita divisiones por cero; interpreta knockbackSmoothIntensityZ como "velocidad"
+        float speed = Mathf.Max(0.0001f, knockbackSmoothIntensityZ);
+        float goDuration = 1f / speed;            // tiempo para llegar al objetivo
+        float returnDuration = goDuration * 1.0f; // tiempo para volver (puedes cambiar la relación)
+
+        // fase 1: ir hacia target
+        float t = 0f;
+        while (t < goDuration)
         {
-            /// Position [0, y, z]
-            float moveZ = Mathf.Clamp(knockbackIntensityZ, -maxKnockbackZ, maxKnockbackZ); // Z (Back)
-            float moveY = Mathf.Clamp(knockbackIntensityY, -maxKnockbackY, maxKnockbackY); // Y (Up/Down)
-            Vector3 finalPosition = new Vector3(0, moveY, -moveZ);
-            transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition, Time.fixedDeltaTime * knockbackSmoothIntensityZ);
-
-            ///// Rotation [0, y, 0] NOT WORKING!!!!
-            //Quaternion rotateY = Quaternion.AngleAxis(knockbackRotationIntensityX, Vector3.up);
-            ////float rotateY = Mathf.Clamp(knockbackRotationIntensityY, -maxKnockbackRotationY, maxKnockbackRotationY); // Y (Up/Down)
-            //Quaternion targetRotation = originRotation * rotateY;
-            ////Quaternion finalRotation = new Quaternion(0, rotateY, 0);
-            //transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.smoothDeltaTime * knockbackRotationSmoothIntensityX);
-
-
-
-
-            //targetPositionRecoil -= new Vector3(0, 0, kickBackZ);
-            //targetPositionRecoil += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
-
-            //targetPositionRecoil = Vector3.Lerp(targetPositionRecoil, initialGunPositionRecoil, Time.deltaTime * returnAmount);
-            //currentPositionRecoil = Vector3.Lerp(currentPositionRecoil, targetPositionRecoil, Time.fixedDeltaTime * snappiness);
-            //transform.localPosition = currentPositionRecoil;
-
-
-
-            //finalPosition = Quaternion.Euler()
-            //transform.rotation = Quaternion.Slerp(transform.rotation, finalPosition, knockbackSmoothIntensityZ * Time.smoothDeltaTime)
-
-
-
-            ////modifying the Vector3, based on input multiplied by speed and time
-            //currentEulerAngles += new Vector3(-knockbackRotationIntensityX, 0, 0) * Time.smoothDeltaTime * knockbackRotationSmoothIntensityX;
-
-            ////moving the value of the Vector3 into Quanternion.eulerAngle format
-            //currentRotation.eulerAngles = currentEulerAngles;
-
-            ////apply the Quaternion.eulerAngles change to the gameObject
-            //transform.localRotation = currentRotation;
-
-
-            activateWeaponKnockback = false;
+            t += Time.deltaTime;
+            float k = Mathf.SmoothStep(0f, 1f, t / goDuration); // suaviza la interpolación; cambia si no quieres SmoothStep
+            transform.localPosition = Vector3.Lerp(startPos, targetPos, k);
+            yield return null;
         }
+        transform.localPosition = targetPos;
+
+        // pausa breve (opcional) para mantener el knockback un momento
+        // yield return new WaitForSeconds(0.02f);
+
+        // fase 2: volver a la posición original (o Vector3.zero si ese es tu "reposo")
+        t = 0f;
+        Vector3 returnStart = transform.localPosition;
+        Vector3 returnTarget = Vector3.zero; // o startPos si prefieres la posición antes del knockback
+        while (t < returnDuration)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.SmoothStep(0f, 1f, t / returnDuration);
+            transform.localPosition = Vector3.Lerp(returnStart, returnTarget, k);
+            yield return null;
+        }
+        transform.localPosition = returnTarget;
+
+        // marcar que ya no hay corutina activa
+        knockbackRoutine = null;
     }
+
+
 
     /// Procedural Recoil
     void UpdatePos()

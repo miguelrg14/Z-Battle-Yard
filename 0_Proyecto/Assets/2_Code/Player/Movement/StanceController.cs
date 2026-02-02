@@ -90,23 +90,23 @@ public class StanceController : MonoBehaviour
             return;
         }
         
-        if (MovementController.isSprinting)     /// Stance when sprinting
-        {
-            if (playerStance == PlayerStance.crouch || playerStance == PlayerStance.prone) // Stand up ==> if player sprints && is (crouching || proning)
-            {
-                playerStance = PlayerStance.stand;
-            }
-            if (playerInput.OnFoot.Crouch.triggered) // If player crouches while sprinting ==> stops sprinting 
-            {
-                MovementController.isSprinting = false;
-                playerStance = PlayerStance.crouch;
-            }
-            if (playerInput.OnFoot.Prone.triggered) // ""    ""    prones   ""      ""     ==> stops sprinting 
-            {
-                MovementController.isSprinting = false;
-                playerStance = PlayerStance.prone;
-            }
-        }
+        //if (MovementController.isSprinting)     /// Stance when sprinting
+        //{
+        //    if (playerStance == PlayerStance.crouch || playerStance == PlayerStance.prone) // Stand up ==> if player sprints && is (crouching || proning)
+        //    {
+        //        playerStance = PlayerStance.stand;
+        //    }
+        //    if (playerInput.OnFoot.Crouch.triggered) // If player crouches while sprinting ==> stops sprinting 
+        //    {
+        //        MovementController.isSprinting = false;
+        //        playerStance = PlayerStance.crouch;
+        //    }
+        //    if (playerInput.OnFoot.Prone.triggered) // ""    ""    prones   ""      ""     ==> stops sprinting 
+        //    {
+        //        MovementController.isSprinting = false;
+        //        playerStance = PlayerStance.prone;
+        //    }
+        //}
     }
 
     /// <summary>

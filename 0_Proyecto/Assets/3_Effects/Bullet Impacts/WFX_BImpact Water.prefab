@@ -4737,6 +4737,7 @@ GameObject:
   - component: {fileID: 7052377678827354843}
   - component: {fileID: 7052377678827354842}
   - component: {fileID: 7052377678827354841}
+  - component: {fileID: 6745225116612373985}
   m_Layer: 0
   m_Name: WFX_BImpact Water
   m_TagString: Untagged
@@ -9472,6 +9473,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &6745225116612373985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7052377678827354823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844d15b025a40dc4ab9aeea8b6264e7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyTimer
+  Timer: 3
 --- !u!1 &7052377679113338625
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6626277110660487025}
   - component: {fileID: 3876636806411514431}
   - component: {fileID: 5203514440831256425}
+  - component: {fileID: 5818519138012192026}
   m_Layer: 0
   m_Name: WFX_BImpact Glass
   m_TagString: Untagged
@@ -4747,6 +4748,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5818519138012192026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490332306110941703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844d15b025a40dc4ab9aeea8b6264e7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyTimer
+  lifeTime: 3
+  fadeDuration: 1
 --- !u!1 &3243734834931038450
 GameObject:
   m_ObjectHideFlags: 0
@@ -14230,7 +14245,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5184011172033005166}
-  m_Mesh: {fileID: 4300000, guid: 9d0862121c112ec4abc229920df08581, type: 3}
+  m_Mesh: {fileID: -462981019419857548, guid: 14ca4fc82234b3240baa9f911dda154b, type: 3}
 --- !u!23 &5842252767945090820
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14256,7 +14271,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d1cd8b9b3c7d785469e17f97b682c90a, type: 2}
+  - {fileID: 2100000, guid: 0e9333cb16f3b514690f027e682e93a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
