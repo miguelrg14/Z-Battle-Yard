@@ -57,6 +57,7 @@ BASE_DEFINES = version_defines() + [
     "NET_STANDARD", "NET_STANDARD_2_0", "NET_STANDARD_2_1", "NETSTANDARD", "NETSTANDARD2_1",
     "CSHARP_7_3_OR_NEWER", "CSHARP_7_OR_LATER", "UNITY_INCLUDE_TESTS",
     "PACKAGE_INPUTSYSTEM_EXISTS",
+    "DEBUG", "TRACE",   # Unity defines both when compiling scripts in the Editor
 ]
 EDITOR_DEFINES = ["UNITY_EDITOR", "UNITY_EDITOR_64", "UNITY_EDITOR_LINUX"]
 
@@ -260,7 +261,7 @@ def main():
                 with open(stub, "w", encoding="utf-8") as f:
                     for m in missing:
                         f.write(f"[System.AttributeUsage(System.AttributeTargets.All, AllowMultiple = true)] "
-                                f"internal sealed class {m} : System.Attribute {{ }}\n")
+                                f"public sealed class {m} : System.Attribute {{ }}\n")
                 print(f"  ~ {name}: stubbing internal attributes {', '.join(missing)}")
                 ok, errors, output = compile_assembly(csc, asm, refs, defines, args.out, netstandard, [stub])
         label = "OK  " if ok else "FAIL"
