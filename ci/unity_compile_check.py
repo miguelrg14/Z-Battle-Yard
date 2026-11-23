@@ -251,6 +251,18 @@ def main():
             refs.append(nunit[0])
         defines = BASE_DEFINES + resolve_version_defines(asm.version_defines, installed) + (EDITOR_DEFINES if uses_editor else [])
         ok, errors, output = compile_assembly(csc, asm, refs, defines, args.out, netstandard)
+        if not ok and not is_ours:
+            # Newer Unity packages use engine-internal attributes (e.g. NoAutoStaticsCleanup) that are not in the
+            # public reference assemblies. Attributes don't change behaviour, so stub them and retry once.
+            missing = sorted({m for e in errors for m in re.findall(r"type or namespace name '(\w+Attribute)'", e)})
+            if missing:
+                stub = os.path.join(args.out, name + ".AttributeStubs.cs")
+                with open(stub, "w", encoding="utf-8") as f:
+                    for m in missing:
+                        f.write(f"[System.AttributeUsage(System.AttributeTargets.All, AllowMultiple = true)] "
+                                f"internal sealed class {m} : System.Attribute {{ }}\n")
+                print(f"  ~ {name}: stubbing internal attributes {', '.join(missing)}")
+                ok, errors, output = compile_assembly(csc, asm, refs, defines, args.out, netstandard, [stub])
         label = "OK  " if ok else "FAIL"
         print(f"[{label}] {name} ({len(asm.sources)} files)")
         if not ok:
