@@ -57,6 +57,7 @@ BASE_DEFINES = version_defines() + [
     "NET_STANDARD", "NET_STANDARD_2_0", "NET_STANDARD_2_1", "NETSTANDARD", "NETSTANDARD2_1",
     "CSHARP_7_3_OR_NEWER", "CSHARP_7_OR_LATER", "UNITY_INCLUDE_TESTS",
     "PACKAGE_INPUTSYSTEM_EXISTS",
+    "TEXTCORE_FONT_ENGINE_1_5_OR_NEWER",   # always true in Unity 6
     "DEBUG", "TRACE",   # Unity defines both when compiling scripts in the Editor
 ]
 EDITOR_DEFINES = ["UNITY_EDITOR", "UNITY_EDITOR_64", "UNITY_EDITOR_LINUX"]
