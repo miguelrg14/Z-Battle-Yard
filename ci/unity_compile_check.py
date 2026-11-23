@@ -103,6 +103,20 @@ def resolve_version_defines(entries, installed):
     return defines
 
 
+def show_source_context(error, radius=12):
+    """Print the code around a compiler error, including the preprocessor lines that guard it."""
+    match = re.match(r"(.+?)\((\d+),\d+\)", error)
+    if not match or not os.path.exists(match.group(1)):
+        return
+    with open(match.group(1), encoding="utf-8-sig", errors="replace") as f:
+        lines = f.read().splitlines()
+    line = int(match.group(2))
+    guards = [f"{i + 1}: {l.strip()}" for i, l in enumerate(lines[:line]) if l.lstrip().startswith("#")]
+    print("    preprocessor lines above the error: " + " | ".join(guards[-6:]))
+    for i in range(max(0, line - radius), min(len(lines), line + 3)):
+        print(f"    {i + 1:6}: {lines[i]}")
+
+
 def find_csc():
     sdk_roots = subprocess.run(["dotnet", "--list-sdks"], capture_output=True, text=True, check=True).stdout.split("\n")
     for line in reversed([l for l in sdk_roots if l.strip()]):
@@ -272,6 +286,7 @@ def main():
             if is_ours:
                 failures.append(name)
             else:
+                show_source_context(errors[0])
                 print(f"    (package assembly {name} failed; this is a limitation of the offline check)")
             compiled[name] = None
             return None
