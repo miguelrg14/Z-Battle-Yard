@@ -1,0 +1,50 @@
+* text=auto
+
+# Code
+*.cs           text diff=csharp
+*.shader       text
+*.cginc        text
+*.hlsl         text
+
+# Unity YAML (text, merged with UnityYAMLMerge)
+*.unity        text merge=unityyamlmerge eol=lf
+*.prefab       text merge=unityyamlmerge eol=lf
+*.asset        text merge=unityyamlmerge eol=lf
+*.meta         text merge=unityyamlmerge eol=lf
+*.mat          text merge=unityyamlmerge eol=lf
+*.anim         text merge=unityyamlmerge eol=lf
+*.controller   text merge=unityyamlmerge eol=lf
+*.mixer        text merge=unityyamlmerge eol=lf
+*.inputactions text eol=lf
+*.vfx          text eol=lf
+*.shadergraph  text eol=lf
+
+# Binary .asset files (must not be treated as text)
+Assets/Scenes/**/LightingData.asset binary
+Assets/Scenes/**/NavMesh.asset      binary
+
+# Images
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.tga  binary
+*.tif  binary
+*.exr  binary
+*.hdr  binary
+*.psd  binary
+*.ai   binary
+*.pdf  binary
+# Audio
+*.ogg  binary
+*.wav  binary
+*.mp3  binary
+*.flac binary
+*.flp  binary
+# 3D
+*.fbx  binary
+*.obj  binary
+*.blend binary
+# Fonts
+*.ttf  binary
+*.otf  binary

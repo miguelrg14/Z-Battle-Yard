@@ -1,0 +1,244 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_NAME: ZBattleYard
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Checks that need no Unity licence
+  # ---------------------------------------------------------------------------
+  core-tests:
+    name: Core rules tests (.NET)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+      - name: Run NUnit tests
+        run: dotnet test ci/CoreTests --logger "trx;LogFileName=core-tests.trx" --results-directory artifacts/core-tests
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: core-tests
+          path: artifacts/core-tests
+
+  compile-check:
+    name: C# compile check (Unity references)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+      - name: Copy Unity reference assemblies from the GameCI editor image
+        run: |
+          UNITY_VERSION=$(sed -n 's/^m_EditorVersion: //p' ProjectSettings/ProjectVersion.txt)
+          echo "Unity $UNITY_VERSION"
+          image="unityci/editor:ubuntu-${UNITY_VERSION}-base-3"
+          docker pull "$image"
+          container=$(docker create "$image")
+          mkdir -p unity
+          docker cp "$container:/opt/unity/Editor/Data/Managed" unity/Managed
+          docker cp "$container:/opt/unity/Editor/Data/NetStandard" unity/NetStandard
+          docker cp "$container:/opt/unity/Editor/Data/Resources/PackageManager/BuiltInPackages" unity/BuiltInPackages
+          ls unity/BuiltInPackages
+          docker rm "$container"
+      - name: Download package sources from the Unity registry
+        run: ci/fetch_unity_packages.sh packages unity/BuiltInPackages
+      - name: Compile project assemblies
+        run: python3 ci/unity_compile_check.py --unity-data unity --packages packages
+
+  check-license:
+    name: Unity licence available?
+    runs-on: ubuntu-latest
+    outputs:
+      available: ${{ steps.check.outputs.available }}
+    steps:
+      - id: check
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        run: |
+          if [ -n "$UNITY_LICENSE" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::UNITY_LICENSE secret not set: the Unity test and build jobs are skipped."
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Unity jobs (need the UNITY_LICENSE, UNITY_EMAIL and UNITY_PASSWORD secrets)
+  # ---------------------------------------------------------------------------
+  unity-tests:
+    name: Unity tests (EditMode + PlayMode)
+    needs: [core-tests, compile-check, check-license]
+    if: needs.check-license.outputs.available == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+    steps:
+      - uses: actions/checkout@v5
+      - name: Restore Git LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.gitattributes') }}-${{ github.sha }}
+          restore-keys: lfs-${{ hashFiles('.gitattributes') }}-
+      - run: git lfs pull
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-tests-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-tests-
+      - uses: game-ci/unity-test-runner@v4
+        id: tests
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: auto
+          testMode: all
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Unity test results
+          artifactsPath: artifacts/unity-tests
+      - name: Print test results
+        if: always()
+        run: |
+          python3 ci/print_test_results.py artifacts/unity-tests
+          ls -la artifacts/unity-tests || true
+          for log in artifacts/unity-tests/*.log; do
+            echo "----- errors and exceptions in $log -----"
+            grep -nE "Exception|error CS|Error|^\s*at |[Tt]est run|Saving results|testResults" "$log" | grep -v "ValidationExceptions" | head -80 || true
+            echo "----- end of $log -----"
+            tail -40 "$log"
+          done
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: unity-test-results
+          path: ${{ steps.tests.outputs.artifactsPath }}
+
+  build:
+    name: Build ${{ matrix.targetPlatform }}
+    needs: [unity-tests, check-license]
+    if: needs.check-license.outputs.available == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform: [StandaloneWindows64, StandaloneLinux64, WebGL]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Restore Git LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.gitattributes') }}-${{ github.sha }}
+          restore-keys: lfs-${{ hashFiles('.gitattributes') }}-
+      - run: git lfs pull
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-${{ matrix.targetPlatform }}-
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: auto
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: ${{ env.BUILD_NAME }}
+          versioning: None
+      - name: Smoke test the Linux build
+        if: matrix.targetPlatform == 'StandaloneLinux64'
+        run: |
+          player="build/StandaloneLinux64/${BUILD_NAME}.x86_64"
+          chmod +x "$player"
+          # Run for 90 s: -smoketest skips the menu and starts a game; the test passes if zombies spawn
+          # and no exception is logged. timeout ends the process (exit code 124), which is expected.
+          timeout 90 "$player" -batchmode -nographics -smoketest -logFile "$PWD/player.log" || true
+          echo "----- player log (smoke test lines) -----"
+          grep -F "[SmokeTest]" player.log || true
+          if grep -n "Exception" player.log; then
+            echo "::error::The game logged exceptions during the smoke test"; exit 1
+          fi
+          grep -qF "[SmokeTest] Zombie spawned" player.log || { echo "::error::No zombie spawned during the smoke test"; tail -50 player.log; exit 1; }
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: ${{ env.BUILD_NAME }}-${{ matrix.targetPlatform }}
+          path: |
+            build/${{ matrix.targetPlatform }}
+            player.log
+
+  # ---------------------------------------------------------------------------
+  # Publishing
+  # ---------------------------------------------------------------------------
+  pages:
+    name: Deploy WebGL build to GitHub Pages
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ env.BUILD_NAME }}-WebGL
+          path: site
+      - name: Prepare site
+        run: |
+          # The WebGL build is in site/build/WebGL/<BUILD_NAME>; publish it at the site root
+          src=$(dirname "$(find site -name index.html | head -1)")
+          mkdir -p public && cp -r "$src"/. public/
+          touch public/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  release:
+    name: Publish release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: ${{ env.BUILD_NAME }}-Standalone*
+          path: builds
+      - name: Package builds
+        run: |
+          for platform in StandaloneWindows64 StandaloneLinux64; do
+            dir=$(find "builds/${BUILD_NAME}-${platform}" -type d -name "${platform}" | head -1)
+            (cd "$dir" && zip -qr "${GITHUB_WORKSPACE}/${BUILD_NAME}-${GITHUB_REF_NAME}-${platform}.zip" .)
+          done
+          ls -la "${GITHUB_WORKSPACE}"/*.zip
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: ${{ env.BUILD_NAME }}-*.zip
