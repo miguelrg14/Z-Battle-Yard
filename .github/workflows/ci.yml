@@ -56,7 +56,7 @@ jobs:
           ls unity/BuiltInPackages
           docker rm "$container"
       - name: Download package sources from the Unity registry
-        run: ci/fetch_unity_packages.sh packages unity/BuiltInPackages
+        run: bash ci/fetch_unity_packages.sh packages unity/BuiltInPackages
       - name: Compile project assemblies
         run: python3 ci/unity_compile_check.py --unity-data unity --packages packages
 
