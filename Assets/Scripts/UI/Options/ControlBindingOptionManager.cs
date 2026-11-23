@@ -57,7 +57,7 @@ public class ControlBindingOptionManager : MonoBehaviour
 
     void Awake()
     {
-        playerInput = GameInput.CreateControls();
+        playerInput = GameInput.CreateControls(this);
         sensitivityLabel = sensitivitySlider.GetComponentInChildren<TextMeshProUGUI>();
         CreateBindingSlots();
     }

@@ -200,7 +200,7 @@ public class StanceController : MonoBehaviour
 
     void InitVariables()
     {
-        playerInput = GameInput.CreateControls(); // Initialize Player input to use new input system
+        playerInput = GameInput.CreateControls(this); // Initialize Player input to use new input system
         playerInput.Enable(); // Enable input system!
 
         playerInput.OnFoot.Crouch.performed += e => Crouch();   // Crouch

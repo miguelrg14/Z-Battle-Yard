@@ -57,7 +57,7 @@ public class Melee : MonoBehaviour
     }
     void Initialize()
     {
-        playerInput = GameInput.CreateControls(); // Initialize New input system
+        playerInput = GameInput.CreateControls(this); // Initialize New input system
         playerInput.Enable();
         playerInput.Weapon.Melee.performed += e => CalculateMelee(); // Melee
         meleeWeapon.SetActive(false);

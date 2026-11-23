@@ -91,7 +91,7 @@ public class HeadMovement : MonoBehaviour
     }
     void Start()
     {
-        playerInput = GameInput.CreateControls();
+        playerInput = GameInput.CreateControls(this);
         playerInput.Enable();
 
         startPos = camera.localPosition;

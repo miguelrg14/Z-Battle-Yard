@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-namespace ZBattleYard.Tests.Gameplay
+namespace ZBattleYard.Tests.PlayMode
 {
     public class CharacterStatsTests
     {

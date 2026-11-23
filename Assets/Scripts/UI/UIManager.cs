@@ -115,7 +115,7 @@ public class UIManager : MonoBehaviour
     }
     void InitializeVariables()
     {
-        playerInput = GameInput.CreateControls(); // Initialize Player input to use new input system
+        playerInput = GameInput.CreateControls(this); // Initialize Player input to use new input system
         playerInput.Enable(); // Enable input system!
         playerInput.OnFoot.Menu.performed += e => ActivateIngameMenu();   // Pause menu
 

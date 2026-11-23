@@ -154,7 +154,7 @@ public class WeaponSway : MonoBehaviour
     }
     void Start()
     {
-        playerInput = GameInput.CreateControls();
+        playerInput = GameInput.CreateControls(this);
         if (!playerInput.asset.enabled) playerInput.Enable(); // Enable input system!
 
         initialGunPositionRecoil = transform.localPosition;

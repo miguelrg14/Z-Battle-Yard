@@ -99,7 +99,7 @@ public class CameraController : MonoBehaviour
     }
     void InitializeVariables()
     {
-        playerInput = GameInput.CreateControls(); // Initialize Player input to use new input system
+        playerInput = GameInput.CreateControls(this); // Initialize Player input to use new input system
         if (!playerInput.asset.enabled) playerInput.Enable(); // Enable input system!
 
         cameraLocked = false;

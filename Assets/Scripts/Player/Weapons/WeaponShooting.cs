@@ -506,7 +506,7 @@ public class WeaponShooting : MonoBehaviour
     }
     void Initialize()
     {
-        playerInput = GameInput.CreateControls(); // Initialize Player input to use new input system
+        playerInput = GameInput.CreateControls(this); // Initialize Player input to use new input system
         if (!playerInput.asset.enabled) playerInput.Enable(); // Enable input system!
 
         playerInput.Weapon.Fire1Pressed.performed += e => StartShooting();     // Shoot

@@ -152,7 +152,7 @@ public class EquipmentManager : MonoBehaviour
     }
     void InitVariables()
     {
-        playerInput = GameInput.CreateControls(); // Initialize Player input to use new input system
+        playerInput = GameInput.CreateControls(this); // Initialize Player input to use new input system
         playerInput.Enable();
 
         playerInput.Weapon.SwitchWeapon.performed += e => inputScroll = e.ReadValue<float>(); // Mouse Scroll Switching

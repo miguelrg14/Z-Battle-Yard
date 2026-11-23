@@ -104,7 +104,7 @@ docs/              Design notes and images
 - **Data-driven content.** Weapons, perks and power-ups are `ScriptableObject`s, so new items need no code changes.
 - **Game rules separated from the engine.** Reload maths, wave scaling, scoring, loot chance and inventory slots live in `ZBattleYard.Core`, an assembly with `noEngineReferences`. They're pure functions that are unit tested in Unity and on plain .NET.
 - **Assembly definitions.** `ZBattleYard.Core` → `ZBattleYard.Gameplay` → test assemblies, which keeps compile times short and dependencies explicit.
-- **New Input System.** One action asset (`GameControls`) for keyboard/mouse and gamepad. `GameInput` saves rebinds to `PlayerPrefs` and applies them to every live input instance.
+- **New Input System.** One action asset (`GameControls`) for keyboard/mouse and gamepad. `GameInput` saves rebinds to `PlayerPrefs`, applies them to every live input instance and releases the instances of destroyed objects.
 - **Zombie AI.** NavMesh agents chase the player. Their speed and health scale with the wave, and they switch to ragdolls on death.
 - **Performance.** I used the Unity Profiler to find UI and spawning spikes. I merged several canvases into one with toggled panels, and added LODs. Lighting was originally baked with Bakery (a paid plugin that isn't included in this repository).
 - **Audio.** An Audio Mixer has groups for music, SFX, UI and voice, and the in-game music is a shuffled playlist.
@@ -116,8 +116,8 @@ More detail, including the original level sketches, is in [docs/design.md](docs/
 | Suite | What it checks | Runs on |
 |---|---|---|
 | `Tests/EditMode/Core` | Reload and ammo rules, wave difficulty curve, score and loot chance, inventory slots | Unity Test Runner and .NET (`dotnet test ci/CoreTests`) |
-| `Tests/EditMode/Gameplay` | Damage and death (each enemy dies once), healing, settings defaults, audio conversion, and data validation (build scenes, weapons, perks, power-ups, input actions) | Unity Test Runner |
-| `Tests/PlayMode` | Loads the main menu and the game scene, waits for the first wave and checks that a kill awards points and is counted once | Unity Test Runner |
+| `Tests/EditMode/Gameplay` | Settings defaults, audio conversion, and data validation (build scenes, weapons, perks, power-ups, input actions) | Unity Test Runner |
+| `Tests/PlayMode` | Damage and death (each enemy dies once) and healing on a real component; loads the main menu and the game scene, waits for the first wave and checks that a kill awards points and is counted once | Unity Test Runner |
 
 Run them in Unity from *Window → General → Test Runner*. To run the core rules without Unity:
 

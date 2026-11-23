@@ -12,7 +12,7 @@ public class Lantern : MonoBehaviour
 
     void Awake()
     {
-        playerInput = GameInput.CreateControls();
+        playerInput = GameInput.CreateControls(this);
         playerInput.OnFoot.Lantern.performed += OnLanternPressed;
 
         gameObject.SetActive(false);    // Start the game with the lantern off

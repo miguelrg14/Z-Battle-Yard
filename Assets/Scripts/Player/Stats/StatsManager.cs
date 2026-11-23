@@ -62,7 +62,7 @@ public class StatsManager : MonoBehaviour
 
     void GetReferences()
     {
-        playerInput = GameInput.CreateControls(); // Initialize Player input to use new input system
+        playerInput = GameInput.CreateControls(this); // Initialize Player input to use new input system
         playerInput.Enable(); // Enable input system!
         playerInput.OnFoot.SeeStats.performed += e => ActivateStatsUI();   // Hold to show stats
         playerInput.OnFoot.SeeStats.canceled += e => DeactivateStatsUI();   // Release to hide stats

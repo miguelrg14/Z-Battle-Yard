@@ -54,7 +54,7 @@ namespace ZBattleYard.Tests.Gameplay
         }
 
         [Test]
-        public void PowerUps_HavePrefabAndIcon()
+        public void PowerUps_HavePrefab_AndTimedOnesHaveIcon()
         {
             var powerUps = LoadAll<PowerUp>().ToList();
             Assert.That(powerUps, Is.Not.Empty);
@@ -62,7 +62,9 @@ namespace ZBattleYard.Tests.Gameplay
             foreach (PowerUp powerUp in powerUps)
             {
                 Assert.IsNotNull(powerUp.prefab, powerUp.name + " has no prefab");
-                Assert.IsNotNull(powerUp.icon, powerUp.name + " has no icon");
+                // Instant power-ups (Max Ammo, Nuke) have no duration and show no HUD icon
+                if (powerUp.duration > 0)
+                    Assert.IsNotNull(powerUp.icon, powerUp.name + " is a timed power-up without HUD icon");
                 Assert.GreaterOrEqual(powerUp.duration, 0, powerUp.name + " duration");
             }
         }
@@ -84,7 +86,8 @@ namespace ZBattleYard.Tests.Gameplay
             }
             finally
             {
-                controls.Dispose();
+                // Dispose() calls Object.Destroy, which is not allowed in Edit Mode
+                Object.DestroyImmediate(controls.asset);
             }
         }
     }
