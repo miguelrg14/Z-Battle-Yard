@@ -169,8 +169,10 @@ jobs:
       - name: Smoke test the Linux build
         if: matrix.targetPlatform == 'StandaloneLinux64'
         run: |
-          player="build/StandaloneLinux64/${BUILD_NAME}.x86_64"
-          chmod +x "$player"
+          # Newer GameCI versions name the Linux executable without the .x86_64 extension
+          player="build/StandaloneLinux64/${BUILD_NAME}"
+          [ -f "$player.x86_64" ] && player="$player.x86_64"
+          sudo chmod +x "$player"
           # Run for 90 s: -smoketest skips the menu and starts a game; the test passes if zombies spawn
           # and no exception is logged. timeout ends the process (exit code 124), which is expected.
           timeout 90 "$player" -batchmode -nographics -smoketest -logFile "$PWD/player.log" || true
